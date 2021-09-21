@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 import pickle
+import streamlit as st
 
 from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, plot_confusion_matrix, confusion_matrix
@@ -15,6 +16,10 @@ if __name__ == '__main__':
     image_size = (224, 224)
     limit = 500
     starting_row_part_two = 5000
+
+    st.title('We are here')
+    uploaded_file = st.file_uploader('upload')
+
 
     metadata_labels = pd.read_csv('csv_files/metadata_labels.csv')
 
