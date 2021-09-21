@@ -1,17 +1,14 @@
 import numpy as np
 import tensorflow as tf
-import cv2
 import pandas as pd
 import pickle
-import matplotlib.pyplot as plt
-import os
-# import PIL
-from sklearn.metrics import classification_report
-from tensorflow.keras.applications.resnet50 import preprocess_input
-from tensorflow.keras.preprocessing import image
+
+from matplotlib import pyplot as plt
+from sklearn.metrics import classification_report, plot_confusion_matrix, confusion_matrix
+
 from tensorflow.keras.models import load_model
 
-from utils import data_preprocessing as dp, modeling as md, plotting
+from utils import data_preprocessing as dp, modeling as md, plotting, evaluation as ev
 
 if __name__ == '__main__':
     images_paths = ["data/HAM10000_images_part_1/"]
@@ -34,23 +31,24 @@ if __name__ == '__main__':
 
     X_train, X_val, y_train, y_val, X_test, y_test = dp.split_in_train_val_test(X, target_one_hot)
 
-
     # train model if model does not exist
     try:
         model = load_model('model/model.h5')
         history_hist = pickle.load(open('model/history', 'rb'))
     except:
+
         history_hist, model = md.instantiate_model(X_train, X_val, y_train, y_val)
 
+    plotting.plot_history(history_hist)
+
     # evaluate
+    # invert one hot encoding
     y_test_one_column = np.argmax(y_test, axis=1)
-    results = model.evaluate(X_test, y_test, batch_size=20)
-    print(f"Accuracy on test set is {results[1] * 100:.2f}%")
     y_pred = np.argmax(model.predict(X_test), axis=1)
 
+    ev.print_accuracy_classificationreport_confusionmmatrix(y_test_one_column,
+                                                y_pred, model, X_test, y_test)
 
-    print(classification_report(y_test_one_column, y_pred,))
-    print(tf.math.confusion_matrix(y_test_one_column, y_pred))
-
-
-    # precision-recall-curve
+    cm = confusion_matrix(y_test_one_column, y_pred)
+    classes = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'vasc', 'mel']
+    plotting.plot_confusion_matrix(cm, classes, normalize=True)
