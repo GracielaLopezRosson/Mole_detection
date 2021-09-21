@@ -1,2 +1,4 @@
 /data/
 /jupyter/.ipynb_checkpoints/
+/model/model.h5
+/model/history
