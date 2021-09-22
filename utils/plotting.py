@@ -19,7 +19,7 @@ def plot_history(history: tensorflow.keras.callbacks.History):
     plt.show()
 
 
-def plot_confusion_matrix(cm, classes,
+def plot_confusion_matrix(model_choice, cm, classes,
                         normalize=False,
                         title='Confusion matrix',
                         cmap=plt.cm.Blues, figsize=(10,10)):
@@ -52,5 +52,6 @@ def plot_confusion_matrix(cm, classes,
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.colorbar()
-    plt.savefig('./visuals/confusion_matrix.jpg')
+    name_path = './visuals/confusion_matrix_v' + str(model_choice+1) + '.jpg'
+    plt.savefig(name_path)
     # plt.show()
