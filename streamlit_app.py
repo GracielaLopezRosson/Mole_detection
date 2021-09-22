@@ -1,25 +1,47 @@
+import os
+
+import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import matplotlib.pyplot as plt
 
+
 if __name__ == '__main__':
     model = load_model('model/base_model_no_tl.h5')
 
-    st.title('Skin cancer detector')
-    uploaded_file = st.file_uploader('Upload an lesion image')
-    if uploaded_file is not None:
-        img = Image.open(uploaded_file)
-        fig, ax = plt.subplots()
-        plt.imshow(img)
-        st.pyplot(fig)
     explanation_expander = st.beta_expander('Some explanation on lesions')
     with explanation_expander:
         st.write('try this')
 
+    st.title('Skin cancer detector')
 
-    # predicted_class = model.predict
+
+    uploaded_file = st.file_uploader('Upload an lesion image')
+    if uploaded_file is not None:
+        img = Image.open(uploaded_file)
+        # plot
+        # fig, ax = plt.subplots()
+        # plt.imshow(img)
+        # st.pyplot(fig)
+
+        def prepare_image(img):
+            tf_image = np.array(img)
+            img_resized = np.resize(tf_image, (224,224,3))
+            st.write(img_resized.shape)
+            img_resized = img_resized[:, :, ::-1]       # RGB to BGR
+            img_reshaped = img_resized.reshape((1, img_resized.shape[0], img_resized.shape[1], img_resized.shape[2]))
+            st.write(img_reshaped.shape)
+            img_scaled = img_reshaped/255
+            st.write(img_scaled)
+
+        prepared_image = prepare_image(img)
+
+
+    # pred_array = model.predict(prepared_image)
+    # st.write(pred_array)
+    # st.write('is this an index?', np.argmax(pred_array))
 
     cancerous_classes = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'vasc', 'mel']
 
@@ -34,14 +56,7 @@ if __name__ == '__main__':
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
-    def prepare_image(image_path: str):
-        img = image.load_img(image_path, target_size=(224, 224))
-        img = image.img_to_array(img)
-        img = img.reshape((1, img.shape[0], img.shape[1], img.shape[2]))
 
-        # we preprocess ourselves ?
-        preprocessed_image = None
-        return preprocessed_image
 
 
     def print_score(prediction: list):
