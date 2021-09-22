@@ -1,17 +1,23 @@
 import streamlit as st
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
-
+from PIL import Image
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+    model = load_model('model/base_model_no_tl.h5')
+
     st.title('Skin cancer detector')
     uploaded_file = st.file_uploader('Upload an lesion image')
-
-    explanation_expander = st.beta_expander('jfjdsfgksn')
+    if uploaded_file is not None:
+        img = Image.open(uploaded_file)
+        fig, ax = plt.subplots()
+        plt.imshow(img)
+        st.pyplot(fig)
+    explanation_expander = st.beta_expander('Some explanation on lesions')
     with explanation_expander:
         st.write('try this')
 
-    model = load_model('model/base_model_no_tl.h5')
 
     # predicted_class = model.predict
 
@@ -48,9 +54,7 @@ if __name__ == '__main__':
             print(f"{round(pred * 100, 4)}%")
 
 
-    # path = "./../data/HAM10000_images_part_2/ISIC_0034320.jpg"
-    # prediction = new_model.predict(prepare_image(path))
+    # prediction = model.predict(prepare_image(path))
     # print(prediction)
-    # plt.imshow(image.load_img(path))
-    # plt.show()
+
 
