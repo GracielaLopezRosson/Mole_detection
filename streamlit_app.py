@@ -1,9 +1,6 @@
-import os
-
 import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
 from PIL import Image
 import matplotlib.pyplot as plt
 
@@ -29,33 +26,36 @@ if __name__ == '__main__':
         def prepare_image(img):
             tf_image = np.array(img)
             img_resized = np.resize(tf_image, (224,224,3))
-            st.write(img_resized.shape)
+            # st.write(img_resized.shape)
             img_resized = img_resized[:, :, ::-1]       # RGB to BGR
             img_reshaped = img_resized.reshape((1, img_resized.shape[0], img_resized.shape[1], img_resized.shape[2]))
-            st.write(img_reshaped.shape)
+            # st.write(img_reshaped.shape)
             img_scaled = img_reshaped/255
-            st.write(img_scaled)
+            # st.write(img_scaled)
+            return img_scaled
 
         prepared_image = prepare_image(img)
 
 
-    # pred_array = model.predict(prepared_image)
-    # st.write(pred_array)
-    # st.write('is this an index?', np.argmax(pred_array))
+        pred_array = model.predict(prepared_image)
+        st.write(pred_array)
+        pred_index = np.argmax(pred_array)
 
-    cancerous_classes = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'vasc', 'mel']
+        classes = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'vasc', 'mel']
+        cancerous_classes = ['mel', 'bkl', 'bcc']      # bkl = warning
 
-    st.write('This is the predicted class.')
-    # if predicted_class in cancerous_classes:
-    #     st.write('Bad news')
-    # else:
-    #     st.write('Good news')
+        predicted_class = classes[pred_index]
+
+        st.write('This is the predicted class:')
+        st.write()
+        if predicted_class in cancerous_classes:
+            st.write('Bad news')
+        else:
+            st.write('Good news')
 
 
     hide_st_style = """ <style> footer {visibility: hidden;} </style> """
     st.markdown(hide_st_style, unsafe_allow_html=True)
-
-
 
 
 
@@ -67,9 +67,3 @@ if __name__ == '__main__':
             print(f"{round(pred * 100, 4)}%")
         else:
             print(f"{round(pred * 100, 4)}%")
-
-
-    # prediction = model.predict(prepare_image(path))
-    # print(prediction)
-
-
