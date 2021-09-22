@@ -56,3 +56,16 @@ def get_preprocessed_images_no_tl(images_directory: str, limit:int) -> np.array:
         if i > limit:
             return np.vstack(images)
     return np.vstack(images)
+
+
+def prepare_one_image_no_tl(img):
+    tf_image = np.array(img)
+    img_resized = np.resize(tf_image, (224, 224, 3))
+    # st.write(img_resized.shape)
+    img_resized = img_resized[:, :, ::-1]  # RGB to BGR
+    img_reshaped = img_resized.reshape(
+        (1, img_resized.shape[0], img_resized.shape[1], img_resized.shape[2]))
+    # st.write(img_reshaped.shape)
+    img_scaled = img_reshaped / 255
+    # st.write(img_scaled)
+    return img_scaled

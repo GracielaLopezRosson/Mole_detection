@@ -5,6 +5,9 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 
+from utils import data_preprocessing as dp
+
+
 if __name__ == '__main__':
 
     model = load_model('model/v2_jacques.h5')
@@ -27,19 +30,7 @@ if __name__ == '__main__':
             # plt.imshow(img)
             # st.pyplot(fig)
 
-            def prepare_image(img):
-                tf_image = np.array(img)
-                img_resized = np.resize(tf_image, (224, 224, 3))
-                # st.write(img_resized.shape)
-                img_resized = img_resized[:, :, ::-1]  # RGB to BGR
-                img_reshaped = img_resized.reshape(
-                    (1, img_resized.shape[0], img_resized.shape[1], img_resized.shape[2]))
-                # st.write(img_reshaped.shape)
-                img_scaled = img_reshaped / 255
-                # st.write(img_scaled)
-                return img_scaled
-
-            prepared_image = prepare_image(img)
+            prepared_image = dp.prepare_one_image_no_tl(img)
 
             pred_array = model.predict(prepared_image)
             st.write(pred_array)
@@ -61,14 +52,3 @@ if __name__ == '__main__':
 
     hide_st_style = """ <style> footer {visibility: hidden;} </style> """
     st.markdown(hide_st_style, unsafe_allow_html=True)
-
-
-
-    # def print_score(prediction: list):
-    #     pred = prediction[0][0]
-    #     if pred > 0.7:
-    #         print(f"{round(pred * 100, 4)}%")
-    #     elif pred < 0.3:
-    #         print(f"{round(pred * 100, 4)}%")
-    #     else:
-    #         print(f"{round(pred * 100, 4)}%")
