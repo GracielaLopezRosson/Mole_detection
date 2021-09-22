@@ -1,4 +1,4 @@
-from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.applications.resnet_v2 import preprocess_input
 from tensorflow.keras.preprocessing import image
 import os
 import numpy as np
@@ -23,6 +23,7 @@ def split_in_train_val_test(X, target):
     )
 
     return X_train, X_val, y_train, y_val, X_test, y_test
+
 
 def get_preprocessed_images(images_directory: str, image_size: tuple,limit:int) -> np.array:
     images = []
