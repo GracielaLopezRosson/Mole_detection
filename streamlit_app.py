@@ -46,8 +46,7 @@ if __name__ == '__main__':
 
         predicted_class = classes[pred_index]
 
-        st.write('This is the predicted class:')
-        st.write()
+        st.write('This is the predicted class:', predicted_class)
         if predicted_class in cancerous_classes:
             st.write('Bad news')
         else:
