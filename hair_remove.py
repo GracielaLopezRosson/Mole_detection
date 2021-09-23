@@ -8,8 +8,6 @@ def remove_hair(images_directory: str, new_directory: str) -> None:
     if not os.path.exists(new_directory):
         os.makedirs(new_directory)
     
-    i = 0
-    
     for img in os.listdir(images_directory):
         src = cv2.imread(images_directory+img)
         grayScale = cv2.cvtColor( src, cv2.COLOR_RGB2GRAY )
@@ -18,10 +16,6 @@ def remove_hair(images_directory: str, new_directory: str) -> None:
         ret,thresh2 = cv2.threshold(blackhat,10,255,cv2.THRESH_BINARY)
         dst = cv2.inpaint(src,thresh2,1,cv2.INPAINT_TELEA)
         cv2.imwrite(new_directory+img, dst, [int(cv2.IMWRITE_JPEG_QUALITY), 90])
-
-        i+=1
-        if i > 10:
-            return
 
 
 if __name__ == '__main__':
