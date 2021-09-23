@@ -1,14 +1,23 @@
-## Skin Cancer Detection
+# Skin Cancer Detection
 
-The health care company "skinCare" hires you as a freelance data scientist for a short mission. Detecting cancerous moles.
+## Description
+
+This project consists in creating a CNN model for the health care company **skinCare**, for automated diagnosis of commmon pigmented skin lesions (commonly called 'moles').
+
+## The Dataset
+
+The dataset used for the model can be found at  https://www.kaggle.com/kmader/skin-cancer-mnist-ham10000 
 
 ## Contributing
-Jacques, Bilal, Maarten & Graciela
 
 
-## Follow Me
-<a href="https://twitter.com/96Nichino" target="_blank"><img class="ai-subscribed-social-icon" src="https://github.com/JacquesDeclercq/DL-wine-quality/blob/main/images/twitter.png" width="30"></a>
-<a href="https://github.com/JacquesDeclercq" target="_blank"><img class="ai-subscribed-social-icon" src="https://github.com/JacquesDeclercq/DL-wine-quality/blob/main/images/github.png" width="30"></a>
-<a href="https://www.linkedin.com/in/jacquesdeclercq/" target="_blank"><img class="ai-subscribed-social-icon" src="https://github.com/JacquesDeclercq/DL-wine-quality/blob/main/images/linkedin.png" width="30"></a>
+# Website
+https://share.streamlit.io/maartenvdbulcke/mole_detection/development
 
-<h3 align="center">Show your support by starring the repository 🙂</h3>
+# Contributors
+| Name                  | Github                                 |
+|-----------------------|----------------------------------------|
+| Graciela Lopez Rosson | https://github.com/GracielaLopezRosson |
+|Jacques Declercq  | https://github.com/JacquesDeclercq | 
+|Bilal Mesmoudi | https://github.com/BMesm |
+|Maarten Van den Bulcke| https://github.com/ |
