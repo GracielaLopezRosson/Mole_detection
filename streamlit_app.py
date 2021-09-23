@@ -23,6 +23,7 @@ if __name__ == '__main__':
         valid_file = False
         try:
             img = Image.open(uploaded_file)
+            st.write(type(img))
             valid_file = True
 
             # plot
