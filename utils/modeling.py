@@ -2,6 +2,7 @@ import pickle
 from tensorflow.keras.applications.resnet_v2 import ResNet50V2
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, BatchNormalization, Flatten, Dropout
+from tensorflow.python.keras.applications.mobilenet_v2 import MobileNetV2
 from tensorflow.python.keras.callbacks import EarlyStopping
 from tensorflow.python.keras.layers import Conv2D, MaxPool2D
 
@@ -75,4 +76,39 @@ def instantiate_model_v2_jacques(X_train, X_val, y_train, y_val):
     with open('model/v2_history', 'wb') as filepath:
         pickle.dump(history.history, filepath)
 
+
     return history.history, base_model
+
+def instantiate_model_v3_mobilenet(choice, X_train, X_val, y_train, y_val):
+    model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+    for layer in model.layers:
+        layer.trainable = False
+
+    new_model = Sequential()
+    new_model.add(model)
+    # new_model.add(Conv2D(32,kernel_size=2, activation='relu'))
+    # new_model.add(Dropout(0.5))
+#     new_model.add(BatchNormalization())
+    new_model.add(Flatten())
+    # new_model.add(Dropout(0.5))
+    new_model.add(Dense(64, activation='relu'))
+    new_model.add(Dropout(0.5))
+    new_model.add(Dense(7, activation='softmax'))
+
+    new_model.compile(optimizer='adam',
+                      loss='categorical_crossentropy',
+                      metrics=['accuracy'])
+
+    history = new_model.fit(X_train, y_train,
+                            epochs=100,
+                            batch_size=64,
+                            validation_data=(X_val, y_val)
+                            )
+
+    new_model.save('v3_mobilenetv2.h5')
+    with open('v3_history', 'wb') as filepath:
+        pickle.dump(history.history, filepath)
+
+    return history.history, new_model
+

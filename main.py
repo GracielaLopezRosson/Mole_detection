@@ -14,14 +14,14 @@ if __name__ == '__main__':
     metadata_labels = pd.read_csv('csv_files/metadata_labels.csv')
 
     # variables
-    images_paths = ["data/HAM10000_images_part_1/"]
+    images_paths = "data/HAM10000_images_part_1/"
     image_size = (224, 224)
-    limit = 2000
-    starting_row_part_two = 5000
+    limit = 500
+    # starting_row_part_two = 5000
 
     # choose a model you want to train and save
-    model_list = [('v1_resnet', 'v1_history'), ('v2_jacques', 'v2_history')]
-    choice = 1
+    model_list = [('v1_resnet', 'v1_history'), ('v2_jacques', 'v2_history'), ('v3_mobilenet', 'v3_history')]
+    choice=2
 
     # prepare path and names, based on model choice
     model_choice = model_list[choice]
@@ -30,22 +30,42 @@ if __name__ == '__main__':
     model_path = os.path.join('model', model_name)
     history_path = os.path.join('model', history_name)
 
-    # get preprocessed images
-    images_array_lst = []
-    for path in images_paths:
-        if choice == 0:
-            images_array = dp.get_preprocessed_images_transfer_learning(path, image_size, limit)
-            images_array_lst.append(images_array)
-        elif choice == 1:
-            images_array = dp.get_preprocessed_images_no_tl(path, limit)    # image_size already defined in function
-            images_array_lst.append(images_array)
-    skin_images = np.vstack(images_array_lst)
+    # read images without hair
+    images_resized = dp.read_images(images_paths, image_size, limit)
+    print(images_resized.shape)
+
+    # hair removal
+    images_no_hair = dp.hair_removal(images_resized)
+    print('no hair', images_no_hair.shape)
 
     # data augmentation
+    # images_augmented = dp.augment_the_data(images_no_hair)
+    # print('aug',images_augmented.shape)
+
+    # preproces for model
+    # skin_images = dp.preprocess_no_hair_images(images_augmented)
+    skin_images = dp.preprocess_no_hair_images(images_no_hair)
+    print('skin', skin_images.shape)
+
+    # # get preprocessed images
+    # images_array_lst = []
+    # for path in images_paths:
+    #     if choice == 0:
+    #         images_array = dp.get_preprocessed_images_transfer_learning(path, image_size, limit)
+    #         images_array_lst.append(images_array)
+    #     elif choice == 1:
+    #         images_array = dp.get_preprocessed_images_no_tl(path, limit)    # image_size already defined in function
+    #         images_array_lst.append(images_array)
+    #     elif choice == 2:
+    #         images_array = dp.get_preprocessed_images_transfer_learning(path, image_size, limit)
+    #         images_array_lst.append(images_array)
+    # skin_images = np.vstack(images_array_lst)
+
 
 
     # divide X and y, one hot encode
     X = skin_images
+    print(X.shape)
     target = metadata_labels.dx[:X.shape[0]]
     target_one_hot = tf.keras.utils.to_categorical(target, num_classes=7, dtype="int")
 
@@ -56,7 +76,7 @@ if __name__ == '__main__':
         model = load_model(model_path)
         history_hist = pickle.load(open(history_path, 'rb'))
     except:
-        history_hist, model = md.instantiate_model(choice, X_train, X_val, y_train, y_val)
+        history_hist, model = md.instantiate_model_v3_mobilenet(choice, X_train, X_val, y_train, y_val)
 
     plotting.plot_history(history_hist)
 
