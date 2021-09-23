@@ -8,3 +8,4 @@ Jacques' EDA.ipynb
 /.idea/
 /model/v1_resnet.h5
 /model/v2_history
+/utils/__pycache__
