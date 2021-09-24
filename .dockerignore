@@ -1,8 +1,0 @@
-/data/
-/jupyter/
-/.ipynb_checkpoints/
-/visuals/
-/.idea/
-BASE MODEL WITHOUT TRANSFER LEARNING.ipynb
-v3_history
-v3_mobilenetv2.h5
