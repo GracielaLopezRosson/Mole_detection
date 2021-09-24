@@ -116,6 +116,10 @@ https://share.streamlit.io/maartenvdbulcke/mole_detection/development
 
 # Conclusion
 
+The two models, binary and multiclass are working well.
+Ongoing work is to improve both: dataset oversampling to balance the classes, collect more data.
+
+
 # Contributors
 | Name                  | Github                                 |
 |-----------------------|----------------------------------------|
