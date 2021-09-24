@@ -103,7 +103,7 @@ We used a transfer learning CNN. Mobilenetv2 is used as a baseline, and we added
 
 
 ![](visuals/plot_history_multiclass.png)
-![](visuals/confusion_matrix_v3.png)
+![](visuals/confusion_matrix_v3.jpg)
 
 
 ## Binary model
