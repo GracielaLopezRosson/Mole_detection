@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import matplotlib.pyplot as plt
 
-from utils import data_preprocessing as dp
+# from utils import data_preprocessing as dp
 
 if __name__ == '__main__':
 
@@ -73,15 +73,23 @@ if __name__ == '__main__':
 
     uploaded_file = st.file_uploader('Upload an lesion image')
     if uploaded_file is not None:
-        # valid_file = False
         try:
             img = Image.open(uploaded_file)
-            # valid_file = True
 
             classes = ['akiec', 'bcc', 'bkl', 'df', 'nv', 'vasc', 'mel']
             cancerous_classes = ['mel', 'bkl', 'bcc']  # bkl = warning
 
-            prepared_image = dp.prepare_one_image_no_tl(img)
+
+            def prepare_one_image_no_tl(img):
+                tf_image = np.array(img)
+                img_resized = np.resize(tf_image, (224, 224, 3))
+                img_resized = img_resized[:, :, ::-1]  # RGB to BGR
+                img_reshaped = img_resized.reshape(
+                    (1, img_resized.shape[0], img_resized.shape[1], img_resized.shape[2]))
+                img_scaled = img_reshaped / 255
+                return img_scaled
+
+            prepared_image = prepare_one_image_no_tl(img)
             pred_array = model.predict(prepared_image)
 
             pred_array_df = pd.DataFrame(pred_array, columns=classes)
@@ -94,7 +102,6 @@ if __name__ == '__main__':
                 st.write('Diagnosis: cancerous')
             else:
                 st.write('Diagnosis: not cancerous')
-
 
         except:
             st.write('Sorry but we do not understand the uploaded file.'
