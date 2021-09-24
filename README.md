@@ -112,8 +112,10 @@ We used a transfer learning CNN. Mobilenetv2 is used as a baseline, and we added
 
 
 
-# Website
+# Websites
 https://share.streamlit.io/maartenvdbulcke/mole_detection/development
+
+https://moledetection.herokuapp.com/
 
 # Conclusion
 
